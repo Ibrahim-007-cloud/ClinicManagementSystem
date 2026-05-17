@@ -1,9 +1,13 @@
 import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { PatientService } from '../../services/patient.service';
 import { Patient } from '../../models/patient.model';
 
 @Component({
   selector: 'app-patient-list',
+  standalone: true,
+  imports: [CommonModule, RouterModule],
   templateUrl: './patient-list.component.html',
   styleUrls: ['./patient-list.component.css']
 })
@@ -18,26 +22,15 @@ export class PatientListComponent implements OnInit {
 
   loadPatients(): void {
     this.patientService.getAll().subscribe({
-      next: (data: Patient[]) => {
-        this.patients = data;
-      },
+      next: (data: Patient[]) => this.patients = data,
       error: (err) => console.error('Error fetching patient logs', err)
     });
   }
 
-  // Explicit type check to bypass template-driven structural errors
-  deletePatient(id: any): void {
-    const patientId = Number(id);
-    if (isNaN(patientId) || patientId === 0) {
-      console.error('Invalid patient id specified.');
-      return;
-    }
-
+  deletePatient(id: number): void {
     if (confirm('Are you sure you want to delete this patient record?')) {
-      this.patientService.delete(patientId).subscribe({
-        next: () => {
-          this.loadPatients();
-        },
+      this.patientService.delete(id).subscribe({
+        next: () => this.loadPatients(),
         error: (err) => {
           console.error(err);
           alert('Error processing delete action.');
