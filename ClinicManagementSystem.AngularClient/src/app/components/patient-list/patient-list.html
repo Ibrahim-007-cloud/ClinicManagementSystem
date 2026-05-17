@@ -1,1 +1,25 @@
-<p>patient-list works!</p>
+<div class="container">
+  <h2>Patient Registry Directory</h2>
+  <button routerLink="/patients/new" class="btn btn-primary">Add New Patient Entry</button>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>ID</th><th>Full Name</th><th>Age</th><th>Gender</th><th>Contact No</th><th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let p of patients">
+        <td>{{p.id}}</td>
+        <td>{{p.name}}</td>
+        <td>{{p.age}}</td>
+        <td>{{p.gender}}</td>
+        <td>{{p.contact}}</td>
+        <td>
+          <button [routerLink]="['/patients', p.id]" class="btn-info">View Details</button>
+          <button [routerLink]="['/patients/edit', p.id]" class="btn-warning">Edit</button>
+          <button (click)="deletePatient(p.id)" class="btn-danger">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

@@ -1,1 +1,23 @@
-<p>patient-form works!</p>
+<div class="form-container">
+  <h3>{{ isEditMode ? 'Update Existing Patient Information' : 'Register New Patient Profile File' }}</h3>
+  <form (ngSubmit)="save()">
+    <div>
+      <label>Full Name:</label>
+      <input [(ngModel)]="patient.name" name="name" required class="form-control" />
+    </div>
+    <div>
+      <label>Age Profile:</label>
+      <input type="number" [(ngModel)]="patient.age" name="age" required class="form-control" />
+    </div>
+    <div>
+      <label>Biological Gender:</label>
+      <input [(ngModel)]="patient.gender" name="gender" required class="form-control" />
+    </div>
+    <div>
+      <label>Contact Phone Line Number:</label>
+      <input [(ngModel)]="patient.contact" name="contact" required class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-success">Save Entry Changes</button>
+    <button type="button" routerLink="/patients" class="btn btn-secondary">Discard</button>
+  </form>
+</div>

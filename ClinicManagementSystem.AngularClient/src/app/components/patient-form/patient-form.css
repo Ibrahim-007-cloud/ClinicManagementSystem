@@ -1,0 +1,44 @@
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { PatientService } from '../../services/patient.service';
+import { Patient } from '../../models/patient.model';
+
+@Component({
+  selector: 'app-patient-form',
+  templateUrl: './patient-form.component.html'
+})
+export class PatientFormComponent implements OnInit {
+  patient: Patient = { id: 0, name: '', age: 0, gender: '', contact: '' };
+  isEditMode = false;
+
+  constructor(
+    private service: PatientService,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {}
+
+  ngOnInit(): void {
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      this.isEditMode = true;
+      this.service.getById(+id).subscribe({
+        next: (data) => this.patient = data,
+        error: (err) => this.router.navigate(['/patients'])
+      });
+    }
+  }
+
+  save(): void {
+    if (this.isEditMode) {
+      this.service.update(this.patient.id, this.patient).subscribe({
+        next: () => this.router.navigate(['/patients']),
+        error: (err) => alert('Error updating patient info')
+      });
+    } else {
+      this.service.create(this.patient).subscribe({
+        next: () => this.router.navigate(['/patients']),
+        error: (err) => alert('Error compiling new patient listing creation')
+      });
+    }
+  }
+}

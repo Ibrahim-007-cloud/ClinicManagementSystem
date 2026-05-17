@@ -1,0 +1,33 @@
+import { Component, OnInit } from '@angular/core';
+import { PatientService } from '../../services/patient.service';
+import { Patient } from '../../models/patient.model';
+
+@Component({
+  selector: 'app-patient-list',
+  templateUrl: './patient-list.component.html'
+})
+export class PatientListComponent implements OnInit {
+  patients: Patient[] = [];
+
+  constructor(private patientService: PatientService) {}
+
+  ngOnInit(): void {
+    this.loadPatients();
+  }
+
+  loadPatients(): void {
+    this.patientService.getAll().subscribe({
+      next: (data) => this.patients = data,
+      error: (err) => console.error('Error fetching patient logs', err)
+    });
+  }
+
+  deletePatient(id: number): void {
+    if(confirm('Are you sure you want to delete this patient record?')) {
+      this.patientService.delete(id).subscribe({
+        next: () => this.loadPatients(),
+        error: (err) => alert('Error processing delete action')
+      });
+    }
+  }
+}
