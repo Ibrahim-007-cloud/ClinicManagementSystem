@@ -1,12 +1,13 @@
-import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component } from '@angular/core';
+import { RouterModule } from '@angular/router'; // 1. Import the routing module
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
-  templateUrl: './app.html',
-  styleUrl: './app.css'
+  standalone: true,
+  imports: [RouterModule], // 2. Add it to the imports array here!
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
 })
-export class App {
-  protected readonly title = signal('ClinicManagementSystem.AngularClient');
+export class AppComponent {
+  title = 'ClinicManagementSystem.AngularClient';
 }

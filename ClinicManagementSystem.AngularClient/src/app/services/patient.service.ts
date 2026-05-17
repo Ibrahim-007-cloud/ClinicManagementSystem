@@ -1,39 +1,40 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { environment } from '../../environments/environment';
-import { Patient } from '../models/patient.model';
+import { Patient } from '../models/patient.model'; 
 
 @Injectable({
   providedIn: 'root'
 })
 export class PatientService {
-  private apiUrl = `${environment.apiUrl}/patients`;
+  // ⚠️ IMPORTANT: Change this URL to match your actual backend API URL!
+  // If your backend is running locally on a different port, update it here.
+  private apiUrl = 'http://localhost:5000/api/patients'; 
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
-  // 1. Fetch all records from the database via the API
-  getPatients(): Observable<Patient[]> {
+  // Get all patients (used by PatientList)
+  getAll(): Observable<Patient[]> {
     return this.http.get<Patient[]>(this.apiUrl);
   }
 
-  // 2. Fetch a single unique profile entry
-  getPatientById(id: number): Observable<Patient> {
+  // Get a single patient by ID (used by PatientForm in Edit mode)
+  getById(id: number): Observable<Patient> {
     return this.http.get<Patient>(`${this.apiUrl}/${id}`);
   }
 
-  // 3. Create a brand new patient entry
-  createPatient(patient: Patient): Observable<Patient> {
+  // Create a new patient (used by PatientForm)
+  create(patient: Patient): Observable<Patient> {
     return this.http.post<Patient>(this.apiUrl, patient);
   }
 
-  // 4. Update an existing record
-  updatePatient(id: number, patient: Patient): Observable<any> {
+  // Update an existing patient (used by PatientForm)
+  update(id: number, patient: Patient): Observable<any> {
     return this.http.put(`${this.apiUrl}/${id}`, patient);
   }
 
-  // 5. Delete a patient profile permanently
-  deletePatient(id: number): Observable<any> {
+  // Delete a patient (used by PatientList)
+  delete(id: number): Observable<any> {
     return this.http.delete(`${this.apiUrl}/${id}`);
   }
 }
