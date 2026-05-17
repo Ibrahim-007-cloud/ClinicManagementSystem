@@ -1,13 +1,14 @@
 import { Component } from '@angular/core';
-import { RouterModule } from '@angular/router'; // 1. Import the routing module
+import { CommonModule } from '@angular/common';
+import { RouterOutlet, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterModule], // 2. Add it to the imports array here!
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  imports: [CommonModule, RouterOutlet, RouterModule],
+  templateUrl: './app.html',
+  styleUrls: ['./app.css']
 })
 export class AppComponent {
-  title = 'ClinicManagementSystem.AngularClient';
+  title = 'ClinicManagementSystem';
 }

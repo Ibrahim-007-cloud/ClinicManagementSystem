@@ -1,0 +1,54 @@
+/* src/app/components/patient-list/patient-list.css */
+.clinical-feature-card {
+  padding: 40px 30px;
+  border-radius: 4px;
+  height: 100%;
+  transition: transform 0.25s ease;
+}
+
+.clinical-feature-card:hover {
+  transform: translateY(-5px);
+}
+
+.bg-primary-blue {
+  background-color: #007bff;
+}
+
+.bg-mid-blue {
+  background-color: #0056b3;
+}
+
+.card-icon-box {
+  font-size: 2.5rem;
+  line-height: 1;
+}
+
+.accent-underline {
+  width: 50px;
+  height: 3px;
+  background-color: var(--lifecare-teal);
+  border-radius: 2px;
+}
+
+/* Custom Table Layout Reskinning */
+.custom-lifecare-table thead th {
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 0.5px;
+  color: var(--lifecare-text-muted);
+  border-bottom: 2px solid var(--border-light);
+  padding: 15px 10px;
+}
+
+.custom-lifecare-table tbody td {
+  padding: 18px 10px;
+  border-bottom: 1px solid var(--border-light);
+  font-size: 0.925rem;
+}
+
+/* Dynamic Pill Colorings */
+.bg-primary-light { background-color: #e3f2fd; }
+.bg-danger-light { background-color: #ffebee; }
+
+.fs-7 { font-size: 0.825rem; }

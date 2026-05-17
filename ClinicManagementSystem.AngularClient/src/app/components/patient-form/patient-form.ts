@@ -13,7 +13,7 @@ import { Patient } from '../../models/patient.model';
   styleUrls: ['./patient-form.css']
 })
 export class PatientForm implements OnInit {
-  patient: Patient = { id: 0, name: '', age: 0, gender: '', contact: '' };
+  patient: Patient = { name: '', age: 0, gender: '', contact: '' };
   isEditMode = false;
 
   constructor(
@@ -27,8 +27,8 @@ export class PatientForm implements OnInit {
     if (id) {
       this.isEditMode = true;
       this.service.getById(+id).subscribe({
-        next: (data: any) => {
-          if(data) this.patient = data;
+        next: (data: Patient) => {
+          if (data) this.patient = data;
         },
         error: (err: any) => {
           console.error('Error fetching patient details:', err);
@@ -39,7 +39,7 @@ export class PatientForm implements OnInit {
   }
 
   save(): void {
-    if (this.isEditMode) {
+    if (this.isEditMode && this.patient.id !== undefined) {
       this.service.update(this.patient.id, this.patient).subscribe({
         next: () => this.router.navigate(['/patients']),
         error: (err: any) => {
@@ -47,7 +47,7 @@ export class PatientForm implements OnInit {
           alert('Error updating patient info');
         }
       });
-    } else {
+    } else if (!this.isEditMode) {
       this.service.create(this.patient).subscribe({
         next: () => this.router.navigate(['/patients']),
         error: (err: any) => {
