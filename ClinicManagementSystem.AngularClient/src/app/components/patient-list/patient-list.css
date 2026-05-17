@@ -1,16 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { PatientService } from '../../services/patient.service';
 import { Patient } from '../../models/patient.model';
 
 @Component({
   selector: 'app-patient-list',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './patient-list.html',
-  styleUrls: ['./patient-list.css']
+  templateUrl: './patient-list.component.html',
+  styleUrls: ['./patient-list.component.css']
 })
-export class PatientList implements OnInit {
+export class PatientListComponent implements OnInit {
   patients: Patient[] = [];
 
   constructor(private patientService: PatientService) {}
@@ -20,24 +17,30 @@ export class PatientList implements OnInit {
   }
 
   loadPatients(): void {
-    this.patientService.getPatients().subscribe({
-      next: (data) => {
+    this.patientService.getAll().subscribe({
+      next: (data: Patient[]) => {
         this.patients = data;
       },
-      error: (err) => {
-        console.error('Error fetching patients:', err);
-      }
+      error: (err) => console.error('Error fetching patient logs', err)
     });
   }
 
-  deletePatient(id: number): void {
-    if (confirm('Are you sure you want to delete this patient?')) {
-      this.patientService.deletePatient(id).subscribe({
+  // Explicit type check to bypass template-driven structural errors
+  deletePatient(id: any): void {
+    const patientId = Number(id);
+    if (isNaN(patientId) || patientId === 0) {
+      console.error('Invalid patient id specified.');
+      return;
+    }
+
+    if (confirm('Are you sure you want to delete this patient record?')) {
+      this.patientService.delete(patientId).subscribe({
         next: () => {
-          this.loadPatients(); // Refresh list after deleting
+          this.loadPatients();
         },
         error: (err) => {
-          console.error('Error deleting patient:', err);
+          console.error(err);
+          alert('Error processing delete action.');
         }
       });
     }
