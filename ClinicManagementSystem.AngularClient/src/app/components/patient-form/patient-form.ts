@@ -13,7 +13,17 @@ import { Patient } from '../../models/patient.model';
   styleUrls: ['./patient-form.css']
 })
 export class PatientForm implements OnInit {
-  patient: Patient = { name: '', age: 0, gender: '', contact: '' };
+  // Fixed mapping properties symmetrically to match your backend database fields
+  patient: Patient = { 
+    patientName: '', 
+    age: 0, 
+    gender: '', 
+    contact: '',
+    problem: '',
+    doctorName: '',
+    visitDate: new Date().toISOString()
+  };
+  
   isEditMode = false;
 
   constructor(
