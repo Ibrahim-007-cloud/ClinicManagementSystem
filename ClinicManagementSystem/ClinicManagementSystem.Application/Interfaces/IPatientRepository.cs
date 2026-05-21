@@ -8,9 +8,8 @@ namespace ClinicManagementSystem.Application.Interfaces
     {
         Task<IEnumerable<Patient>> GetAllAsync();
         Task<Patient?> GetByIdAsync(int id);
-        Task AddAsync(Patient patient);
-        void Update(Patient patient);
-        void Delete(Patient patient);
-        Task<bool> SaveChangesAsync();
+        Task<Patient> CreateAsync(Patient patient);
+        Task<bool> UpdateAsync(int id, Patient patient);
+        Task<bool> DeleteAsync(int id);
     }
 }

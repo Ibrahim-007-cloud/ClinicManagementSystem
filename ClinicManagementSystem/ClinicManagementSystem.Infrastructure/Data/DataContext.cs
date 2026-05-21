@@ -3,21 +3,25 @@ using ClinicManagementSystem.Domain.Entities;
 
 namespace ClinicManagementSystem.Infrastructure.Data
 {
-    public class DataContext : DbContext
+    public class ApplicationDbContext : DbContext
     {
-        public DataContext(DbContextOptions<DataContext> options) : base(options)
-        {
-        }
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
-        // Maps our Patient domain entity to a SQLite table named 'Patients'
         public DbSet<Patient> Patients { get; set; }
+        public DbSet<Doctor> Doctors { get; set; }
+        public DbSet<Visit> Visits { get; set; } // <-- Add this line if missing
+        public DbSet<Prescription> Prescriptions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            
-            // Explicitly enforce any data rules if needed
-            modelBuilder.Entity<Patient>().Property(p => p.PatientName).IsRequired();
+
+            // Configuring the one-to-many relationship cleanly
+            modelBuilder.Entity<Visit>()
+                .HasOne(v => v.Doctor)
+                .WithMany(d => d.Visits)
+                .HasForeignKey(v => v.DoctorId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

@@ -1,0 +1,47 @@
+<div class="container m-4">
+  <div *ngIf="isLoading" class="text-center my-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading Profile...</span>
+    </div>
+  </div>
+
+  <div class="card shadow" *ngIf="!isLoading && patient">
+    <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
+      <h3 class="mb-0">Patient Profile: Details & Context</h3>
+      <a routerLink="/patients" class="btn btn-light btn-sm">Back to Directory</a>
+    </div>
+    
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <h5 class="text-secondary border-bottom pb-2">Personal Information</h5>
+          <p><strong>Full Name:</strong> {{ patient.firstName }} {{ patient.lastName }}</p>
+          <p><strong>Age:</strong> {{ patient.age }} Years</p>
+          <p><strong>Gender:</strong> {{ patient.gender }}</p>
+        </div>
+
+        <div class="col-md-6 mb-3">
+          <h5 class="text-secondary border-bottom pb-2">Clinical Details</h5>
+          <p><strong>Contact Number:</strong> {{ patient.contact }}</p>
+          <p>
+            <strong>Blood Group:</strong> 
+            <span class="badge bg-danger ms-1">{{ patient.bloodGroup || 'Not Specified' }}</span>
+          </p>
+        </div>
+      </div>
+
+      <div class="row mt-2">
+        <div class="col-12">
+          <h5 class="text-secondary border-bottom pb-2">Residential Address</h5>
+          <p class="bg-light p-3 rounded border text-muted">
+            {{ patient.address || 'No residential address registered for this profile entry.' }}
+          </p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="card-footer bg-light text-end">
+      <small class="text-muted">System Record Identity Field: #{{ patient.id }}</small>
+    </div>
+  </div>
+</div>

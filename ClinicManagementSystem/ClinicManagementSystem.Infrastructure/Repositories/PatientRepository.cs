@@ -3,47 +3,47 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using ClinicManagementSystem.Application.Interfaces;
 using ClinicManagementSystem.Domain.Entities;
-using ClinicManagementSystem.Infrastructure.Data;
 
-namespace ClinicManagementSystem.Infrastructure.Repositories
+namespace ClinicManagementSystem.Infrastructure.Repositories;
+
+public class PatientRepository : IPatientRepository
 {
-    public class PatientRepository : IPatientRepository
+    private readonly ClinicManagementSystem.Infrastructure.Data.DataContext _context;
+
+    public PatientRepository(ClinicManagementSystem.Infrastructure.Data.DataContext context)
     {
-        private readonly DataContext _context;
+        _context = context;
+    }
 
-        public PatientRepository(DataContext context)
-        {
-            _context = context;
-        }
+    public async Task<IEnumerable<Patient>> GetAllPatientsAsync()
+    {
+        return await _context.Patients.ToListAsync();
+    }
 
-        public async Task<IEnumerable<Patient>> GetAllAsync()
-        {
-            return await _context.Patients.ToListAsync();
-        }
+    public async Task<Patient?> GetPatientByIdAsync(int id)
+    {
+        return await _context.Patients.FindAsync(id);
+    }
 
-        public async Task<Patient?> GetByIdAsync(int id)
-        {
-            return await _context.Patients.FindAsync(id);
-        }
+    public async Task AddPatientAsync(Patient patient)
+    {
+        await _context.Patients.AddAsync(patient);
+        await _context.SaveChangesAsync();
+    }
 
-        public async Task AddAsync(Patient patient)
-        {
-            await _context.Patients.AddAsync(patient);
-        }
+    public async Task UpdatePatientAsync(Patient patient)
+    {
+        _context.Patients.Update(patient);
+        await _context.SaveChangesAsync();
+    }
 
-        public void Update(Patient patient)
-        {
-            _context.Patients.Update(patient);
-        }
-
-        public void Delete(Patient patient)
+    public async Task DeletePatientAsync(int id)
+    {
+        var patient = await _context.Patients.FindAsync(id);
+        if (patient != null)
         {
             _context.Patients.Remove(patient);
-        }
-
-        public async Task<bool> SaveChangesAsync()
-        {
-            return await _context.SaveChangesAsync() > 0;
+            await _context.SaveChangesAsync();
         }
     }
 }

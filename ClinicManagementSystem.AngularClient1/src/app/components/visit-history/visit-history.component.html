@@ -1,0 +1,81 @@
+<div *ngIf="isLoading" class="text-center my-5">
+  <div class="spinner-border text-primary" role="status">
+    <span class="visually-hidden">Loading...</span>
+  </div>
+</div>
+
+<div *ngIf="!isLoading">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h2 class="fw-bold mb-1">Visit History</h2>
+      <p class="text-muted mb-0">All recorded patient visits</p>
+    </div>
+  </div>
+
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+      <div class="input-group">
+        <span class="input-group-text bg-white">
+          <i class="bi bi-search text-muted"></i>
+        </span>
+        <input
+          type="text"
+          class="form-control border-start-0"
+          placeholder="Search by patient, doctor or reason..."
+          (input)="onSearch($event)"
+        />
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="filteredVisits.length === 0" class="text-center py-5 text-muted">
+    <i class="bi bi-calendar-x fs-1 d-block mb-3"></i>
+    <h5>No visits found</h5>
+  </div>
+
+  <div class="card shadow-sm" *ngIf="filteredVisits.length > 0">
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="table-light">
+            <tr>
+              <th>#</th>
+              <th>Patient</th>
+              <th>Doctor</th>
+              <th>Date</th>
+              <th>Reason</th>
+              <th>Diagnosis</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let visit of filteredVisits; let i = index">
+              <td class="text-muted">{{ i + 1 }}</td>
+              <td>
+                <div class="d-flex align-items-center gap-2">
+                  <div class="avatar-circle">
+                    {{ visit.patientName?.charAt(0) | uppercase }}
+                  </div>
+                  <span class="fw-medium">{{ visit.patientName }}</span>
+                </div>
+              </td>
+              <td>{{ visit.doctorName || '—' }}</td>
+              <td>{{ visit.visitDate | date: 'dd MMM yyyy' }}</td>
+              <td>{{ visit.reason || '—' }}</td>
+              <td>{{ visit.diagnosis || '—' }}</td>
+              <td>
+                <span class="badge"
+                  [ngClass]="{
+                    'bg-success': visit.status === 'Completed',
+                    'bg-warning text-dark': visit.status === 'Pending'
+                  }">
+                  {{ visit.status }}
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

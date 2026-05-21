@@ -1,4 +1,4 @@
-// 1. CLEAN USING STATEMENTS (Removed the broken Microsoft.OpenApi.Models line)
+// 1. CLEAN USING STATEMENTS
 using Microsoft.EntityFrameworkCore;
 using ClinicManagementSystem.Infrastructure.Data;
 using ClinicManagementSystem.Infrastructure.Repositories;
@@ -16,9 +16,17 @@ builder.Services.AddDbContext<DataContext>(options =>
 // 4. REGISTER DEPENDENCY INJECTION (DI) LAYERS
 builder.Services.AddScoped<IPatientRepository, PatientRepository>();
 builder.Services.AddScoped<IPatientService, PatientService>();
+builder.Services.AddScoped<IVisitRepository, VisitRepository>(); // Fixed: Removed double 'v' typo
+builder.Services.AddScoped<IVisitService, VisitService>();
 
-// 5. BOILERPLATE API SERVICES
-builder.Services.AddControllers();
+// 5. BOILERPLATE API SERVICES WITH MERGED JSON OPTIONS
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        // Ignores navigation loops when returning data to Angular
+        options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+    });
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 

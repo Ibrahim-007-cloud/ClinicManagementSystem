@@ -1,0 +1,74 @@
+<div class="card m-4">
+  <div class="card-header bg-primary text-white">
+    <h3>{{ isEditMode ? 'Edit Patient Details' : 'Add New Patient' }}</h3>
+  </div>
+  <div class="card-body">
+    <form [formGroup]="patientForm" (ngSubmit)="onSubmit()">
+      
+      <div class="mb-3">
+        <label class="form-label">First Name</label>
+        <input type="text" class="form-control" formControlName="firstName">
+        <div *ngIf="patientForm.get('firstName')?.invalid && patientForm.get('firstName')?.touched" class="text-danger small">
+          First name is required.
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Last Name</label>
+        <input type="text" class="form-control" formControlName="lastName">
+        <div *ngIf="patientForm.get('lastName')?.invalid && patientForm.get('lastName')?.touched" class="text-danger small">
+          Last name is required.
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Age</label>
+        <input type="number" class="form-control" formControlName="age">
+        <div *ngIf="patientForm.get('age')?.touched && patientForm.get('age')?.errors?.['required']" class="text-danger small">
+          Age is required.
+        </div>
+        <div *ngIf="patientForm.get('age')?.errors?.['min']" class="text-danger small">
+          Age must be a positive number.
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Contact Number</label>
+        <input type="text" class="form-control" formControlName="contact">
+        <div *ngIf="patientForm.get('contact')?.touched && patientForm.get('contact')?.errors?.['required']" class="text-danger small">
+          Contact number is required.
+        </div>
+        <div *ngIf="patientForm.get('contact')?.touched && patientForm.get('contact')?.errors?.['pattern']" class="text-danger small">
+          Please enter a valid phone number (10 to 11 digits).
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Gender</label>
+        <select class="form-select" formControlName="gender">
+          <option value="">Select Gender</option>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+          <option value="Other">Other</option>
+        </select>
+        <div *ngIf="patientForm.get('gender')?.invalid && patientForm.get('gender')?.touched" class="text-danger small">
+          Gender selection is required.
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Blood Group (Optional)</label>
+        <input type="text" class="form-control" formControlName="bloodGroup">
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Address (Optional)</label>
+        <textarea class="form-control" formControlName="address" rows="2"></textarea>
+      </div>
+
+      <button type="submit" class="btn btn-success" [disabled]="patientForm.invalid">
+        Save Patient Records
+      </button>
+    </form>
+  </div>
+</div>

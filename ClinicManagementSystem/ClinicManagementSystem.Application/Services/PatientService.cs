@@ -1,61 +1,44 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using ClinicManagementSystem.Application.Interfaces;
 using ClinicManagementSystem.Domain.Entities;
+using ClinicManagementSystem.Application.Interfaces;
 
 namespace ClinicManagementSystem.Application.Services
 {
     public class PatientService : IPatientService
     {
-        private readonly IPatientRepository _repository;
+        private readonly IPatientRepository _patientRepository;
 
-        public PatientService(IPatientRepository repository)
+        public PatientService(IPatientRepository patientRepository)
         {
-            _repository = repository;
+            _patientRepository = patientRepository;
         }
 
         public async Task<IEnumerable<Patient>> GetAllPatientsAsync()
         {
-            return await _repository.GetAllAsync();
+            return await _patientRepository.GetAllAsync();
         }
 
+        // Fixed: Added '?' to match interface and kept only ONE clean instance
         public async Task<Patient?> GetPatientByIdAsync(int id)
         {
-            return await _repository.GetByIdAsync(id);
+            return await _patientRepository.GetByIdAsync(id);
         }
 
         public async Task<Patient> CreatePatientAsync(Patient patient)
         {
-            await _repository.AddAsync(patient);
-            await _repository.SaveChangesAsync();
-            return patient;
+            return await _patientRepository.CreateAsync(patient);
         }
 
         public async Task<bool> UpdatePatientAsync(int id, Patient patient)
         {
-            var existingPatient = await _repository.GetByIdAsync(id);
-            if (existingPatient == null) return false;
-
-            // Map incoming values to database entity fields
-            existingPatient.PatientName = patient.PatientName;
-            existingPatient.Age = patient.Age;
-            existingPatient.Gender = patient.Gender;
-            existingPatient.Contact = patient.Contact;
-            existingPatient.Problem = patient.Problem;
-            existingPatient.DoctorName = patient.DoctorName;
-            existingPatient.VisitDate = patient.VisitDate;
-
-            _repository.Update(existingPatient);
-            return await _repository.SaveChangesAsync();
+            return await _patientRepository.UpdateAsync(id, patient);
         }
 
+        // Fixed: Implemented the missing interface member explicitly
         public async Task<bool> DeletePatientAsync(int id)
         {
-            var patient = await _repository.GetByIdAsync(id);
-            if (patient == null) return false;
-
-            _repository.Delete(patient);
-            return await _repository.SaveChangesAsync();
+            return await _patientRepository.DeleteAsync(id);
         }
     }
 }
